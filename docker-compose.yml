@@ -16,8 +16,27 @@ services:
       - backend
 
   backend:
-    build: ./backend
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: backend
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
 
